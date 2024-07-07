@@ -7,6 +7,7 @@ import { get } from '../utils/adapter'
 //available for adoption.
 
 const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, speciesSelected: string }) => {
+    console.log("🚀 ~ SearchParams ~ apiResponse:", apiResponse)
     const navigate = useNavigate()
 
     const [desiredAge, setDesiredAge] = useState<string>("")
@@ -14,7 +15,7 @@ const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, spec
     const [desiredGeoRange, setDesiredGeoRange] = useState<string>("35")
     const [desiredColor, setDesiredColor] = useState<string>("")
     const [desiredBreed, setDesiredBreed] = useState<string>("")
-    const [cityOrZipCode, setCityOrZipCode] = useState<string>("")
+    const [zipCode, setZipCode] = useState<string>("")
     const [species, setSpecies] = useState<string>("")
 
     const [ageOptionsAvailable, setAgeOptionsAvailable] = useState<SubObject[]>([])
@@ -35,7 +36,7 @@ const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, spec
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let response = await get(`https://api-staging.adoptapet.com/search/pet_search?key=${process.env.REACT_APP_API_KEY}&v=3&output=json&city_or_zip=${cityOrZipCode}&geo_range=${desiredGeoRange}&species=${species}&breed_id=${desiredBreed}&sex=${desiredGender}&age=${desiredAge}&color_id=${desiredColor}&start_number=1&end_number=50`)
+        let response = await get(`https://api-staging.adoptapet.com/search/pet_search?key=${process.env.REACT_APP_API_KEY}&v=3&output=json&city_or_zip=${zipCode}&geo_range=${desiredGeoRange}&species=${species}&breed_id=${desiredBreed}&sex=${desiredGender}&age=${desiredAge}&color_id=${desiredColor}&start_number=1&end_number=50`)
 
         navigate('/pets-list', {
             state: {
@@ -117,18 +118,18 @@ const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, spec
                     </select>
                 </label>
 
-                <label className="flex flex-col gap-2 text-white" htmlFor="city">
-                    City/Zip Code
+                <label className="flex flex-col gap-2 text-white" htmlFor="zip_code">
+                    US Zip Code
                     <input
                         className="text-black rounded-md w-[80%] outline-none p-2"
                         type="text"
                         placeholder="Enter your city or zip"
-                        onChange={(e) => setCityOrZipCode(e.target.value)}
+                        onChange={(e) => setZipCode(e.target.value)}
                         id="city_or_zip"
-                        value={cityOrZipCode}
+                        value={zipCode}
                     />
                 </label>
-                <button disabled={cityOrZipCode === ""} type="submit" className="max-w-fit text-white px-4 py-2 bg-[#626087] rounded-lg shadow-md hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed">Find my Pawfect Match</button>
+                <button disabled={zipCode === ""} type="submit" className="max-w-fit text-white px-4 py-2 bg-[#626087] rounded-lg shadow-md hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed">Find my Pawfect Match</button>
             </form>
 
         </div >
