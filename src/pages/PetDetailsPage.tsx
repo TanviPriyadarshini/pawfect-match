@@ -25,6 +25,10 @@ const PetDetailsPage = () => {
 
     const pet = results.data?.pet;
 
+    if (!pet) {
+        throw new Error("No Pets found :(")
+    }
+
     return (
         <div className="flex justify-center items-center h-[90vh]">
             <div className="rounded overflow-hidden p-7 shadow-lg bg-slate-50 m-auto max-w-full flex flex-col max-h-[80vh] justify-center items-center">

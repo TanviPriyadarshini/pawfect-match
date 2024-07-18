@@ -1,7 +1,5 @@
-import React from 'react'
 import { IoMdPaw } from "react-icons/io";
 import { Link } from 'react-router-dom';
-
 
 const NavBar = () => {
     return (

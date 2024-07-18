@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { SubObject } from '../utils/interface'
 import { useNavigate } from 'react-router'
 import { get } from '../utils/adapter'
+import { SpeciesSelectionResponse } from '../utils/interface'
 
 //User inputs her choice from all the inputs available and the component make a call for pets that meet the creteria and are 
 //available for adoption.
 
-const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, speciesSelected: string }) => {
-    console.log("🚀 ~ SearchParams ~ apiResponse:", apiResponse)
+const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: SpeciesSelectionResponse | {}, speciesSelected: string }) => {
     const navigate = useNavigate()
 
     const [desiredAge, setDesiredAge] = useState<string>("")
@@ -25,12 +25,17 @@ const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, spec
     const [breedOptionsAvailable, setBreedOptionsAvailable] = useState<SubObject[]>([])
 
     useEffect(() => {
-        setAgeOptionsAvailable(apiResponse.age)
-        setGenderOptionsAvailable(apiResponse.sex)
-        setGeoRangeOptionsAvailable(apiResponse.geo_range)
-        setColorOptionsAvailable(apiResponse.color_id)
-        setBreedOptionsAvailable(apiResponse.breed_id)
-        setSpecies(speciesSelected)
+        if (Object.keys(apiResponse).length === 0 && apiResponse.constructor === Object) {
+            return
+        }
+        if (Object.keys(apiResponse).length !== 0 && apiResponse.constructor === Object) {
+            setAgeOptionsAvailable((apiResponse as SpeciesSelectionResponse).age)
+            setGenderOptionsAvailable((apiResponse as SpeciesSelectionResponse).sex)
+            setGeoRangeOptionsAvailable((apiResponse as SpeciesSelectionResponse).geo_range)
+            setColorOptionsAvailable((apiResponse as SpeciesSelectionResponse).color_id)
+            setBreedOptionsAvailable((apiResponse as SpeciesSelectionResponse).breed_id)
+            setSpecies(speciesSelected)
+        }
     }, [apiResponse]) //eslint-disable-line react-hooks/exhaustive-deps
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -131,7 +136,6 @@ const SearchParams = ({ apiResponse, speciesSelected }: { apiResponse: any, spec
                 </label>
                 <button disabled={zipCode === ""} type="submit" className="max-w-fit text-white px-4 py-2 bg-[#626087] rounded-lg shadow-md hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed">Find my Pawfect Match</button>
             </form>
-
         </div >
     )
 }
