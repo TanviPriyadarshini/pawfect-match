@@ -12,6 +12,14 @@ export interface SpeciesSelectionResponse {
     color_id: SubObject[];
 }
 
+export interface MenuOptionsAvailable {
+    age: SubObject[],
+    gender: SubObject[],
+    geoRange: SubObject[],
+    color: SubObject[],
+    breed: SubObject[]
+}
+
 export interface SubObject {
     label: string;
     value: string;
